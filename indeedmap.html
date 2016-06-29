@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.16/esri/css/esri.css">
+    <link rel="stylesheet" href="indeedmap.css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:300' rel='stylesheet' type='text/css'>
+    <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://js.arcgis.com/3.16/"></script>
+    <script type="text/javascript" src="http://gdc.indeed.com/ads/apiresults.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indeed Map</title>
+  </head>
+
+  <body>
+    <div id="main">
+      <ul>
+        <li id="search-btn" class="nav-btn">Search</li>
+        <li id="map-btn" class="nav-btn">Map</li>
+        <li id="details-btn" class="nav-btn">Details</li>
+      </ul>
+      <div id="search" class="pane">
+        <h1>A map based job search application</h1>
+        <p>powered by the Indeed Job API</p>
+        <input id="q" placeholder="search keywords" type="text"></input>
+        <input id="city-state" placeholder="city, state" type="text"></input>
+        <div class="select-style">
+          <select id="radius">
+            <option value="5">5 mile search radius</option>
+            <option value="10">10 mile search radius</option>
+            <option value="15">15 mile search radius</option>
+            <option value="25" selected>25 mile search radius</option>
+            <option value="50">50 mile search radius</option>
+            <option value="100">100 mile search radius</option>
+          </select>
+        </div>
+        <div class="select-style">
+          <select id="jobtype">
+            <option value="fulltime" selected></option>
+            <option value="fulltime" selected>full time</option>
+            <option value="parttime">part time</option>
+            <option value="contract">contract</option>
+            <option value="internship">internship</option>
+            <option value="temporary">temporary</option>
+          </select>
+        </div>
+        <button id="search-button">Search</button>
+        <br>
+        <span id=indeed_at><a href="http://www.indeed.com/">jobs</a> by <a
+href="http://www.indeed.com/" title="Job Search"><img
+src="http://www.indeed.com/p/jobsearch.gif" style="border: 0;
+vertical-align: middle;" alt="Indeed job search"></a></span>
+      </div>
+      <div id="details" class="pane">
+        <p id="search-error">An error occurred for this search! All results may not de displayed.</p>
+        <p id="total-jobs">Perform a job search to see its details.</p>
+        <p id="total-jobs-no-coords"></p>
+        <div id="jobs-no-coords"></div>
+      </div>
+    </div>
+    <div id="map">
+      <div id="progress-overlay">
+        <div id="progress-container"></div>
+      </div>
+    </div>
+    <script src="indeedmap.js">
+
+
+    </script>
+  </body>
+
+</html>
