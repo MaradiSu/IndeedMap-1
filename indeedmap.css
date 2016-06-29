@@ -37,7 +37,7 @@ circle:hover {
 	float: left;
 	height: 100vh;
 	box-sizing: border-box;
-	overflow: scroll;
+	overflow: auto;
 	font-family: 'Fira Sans', sans-serif;
 	font-weight: 300;
 }
