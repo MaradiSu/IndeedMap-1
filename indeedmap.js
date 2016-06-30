@@ -216,7 +216,7 @@ $(document).ready(function() {
       function getNextPage(startResults, numResults) {
         $.ajax({
           type: "GET",
-          url: "https://api.indeed.com/ads/apisearch",
+          url: "http://api.indeed.com/ads/apisearch",
           dataType: "jsonp",
           cache: false,
           crossDomain: true,
@@ -264,7 +264,7 @@ $(document).ready(function() {
         //send an initial request to get total jobs found
         $.ajax({
           type: "GET",
-          url: "https://api.indeed.com/ads/apisearch",
+          url: "http://api.indeed.com/ads/apisearch",
           dataType: "jsonp",
           cache: false,
           crossDomain: true,
@@ -316,7 +316,7 @@ $(document).ready(function() {
             }
           },
           error: function() {
-            alert("An error has occurred!");
+            alert("An error has occurred! Refreshing your browser may help solve this issue.");
             $("#progress-container").css("display", "none");
             $("#progress-overlay").css("display", "none");
           }
