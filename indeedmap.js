@@ -216,7 +216,7 @@ $(document).ready(function() {
       function getNextPage(startResults, numResults) {
         $.ajax({
           type: "GET",
-          url: "http://api.indeed.com/ads/apisearch",
+          url: "https://api.indeed.com/ads/apisearch",
           dataType: "jsonp",
           cache: false,
           crossDomain: true,
@@ -259,12 +259,13 @@ $(document).ready(function() {
         //for responsive design where map is tab in navigation bar, display map pane
         if ($("#map").css("display") == "none") {
           $("#map-btn").trigger("click");
+          $("html body").animate({scrollTop:0},0);
         }
 
         //send an initial request to get total jobs found
         $.ajax({
           type: "GET",
-          url: "http://api.indeed.com/ads/apisearch",
+          url: "https://api.indeed.com/ads/apisearch",
           dataType: "jsonp",
           cache: false,
           crossDomain: true,
@@ -316,7 +317,7 @@ $(document).ready(function() {
             }
           },
           error: function() {
-            alert("An error has occurred! Refreshing your browser may help solve this issue.");
+            alert("An error has occurred!");
             $("#progress-container").css("display", "none");
             $("#progress-overlay").css("display", "none");
           }
