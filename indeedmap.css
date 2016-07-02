@@ -90,17 +90,16 @@ circle:hover {
 
 .select-style {
     padding: 0;
-    margin-bottom: 2px;
     border: 1px solid #ccc;
     width: 100%;
     border-radius: 3px;
-    overflow: hidden;
     background-color: #fff;
     background: #fff;
     display: inline-block;
+    margin-bottom: 10px;
 }
 
-.select-style select {
+.select-style>select {
     padding: 10px;
     width: 100%;
     border: none;
@@ -126,7 +125,7 @@ textarea:focus, input:focus, select:focus, button:focus {
     border-color: #3163f2;
     color: #3163f2;
     transition: all 0.5s ease;
-    margin-bottom:4%;
+    margin: 10px 0 20px 0;
     -webkit-transition: all 0.3s ease-in-out;
        -moz-transition: all 0.3s ease-in-out;
             transition: all 0.3s ease-in-out;
