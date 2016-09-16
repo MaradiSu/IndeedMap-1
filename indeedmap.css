@@ -165,12 +165,12 @@ textarea:focus, input:focus, select:focus, button:focus {
 	height: 100vh;
 	background-color: rgba(255,255,255,0.7);
 	position: absolute;
-	top:0;
 	left: 350px;
 	z-index: 99;
 	display: none;
   	justify-content: center;
   	align-items: center;
+  	bottom: 0;
 	
 }
 
@@ -238,6 +238,9 @@ textarea:focus, input:focus, select:focus, button:focus {
 	
 	#progress-overlay {
     	width: 100%;
+    	height: -webkit-calc(100vh - 61px);
+  		height: -moz-calc(100vh - 61px);
+  		height: calc(100vh - 61px);
     	left: 0;
 	}
 }
