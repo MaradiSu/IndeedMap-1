@@ -238,9 +238,6 @@ textarea:focus, input:focus, select:focus, button:focus {
 	
 	#progress-overlay {
     	width: 100%;
-    	height: -webkit-calc(100vh - 61px);
-  		height: -moz-calc(100vh - 61px);
-  		height: calc(100vh - 61px);
     	left: 0;
 	}
 }
