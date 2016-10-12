@@ -57,7 +57,7 @@ $(document).ready(function() {
       map.setInfoWindow(infoWindow);
 
       var template = new InfoTemplate();
-      template.setTitle("<b>${jobs} job in ${city}, ${state} (${latitude},${longitude})</b>");
+      template.setTitle("<b>${jobs} job in ${city}, ${state} (${longitude},${latitude})</b>");
       template.setContent("<b><a href='${url}' target='_blank'>${jobTitle}</a></b><br>${company}<hr>");
 
       var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 15,
