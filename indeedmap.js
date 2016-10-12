@@ -194,7 +194,7 @@ $(document).ready(function() {
                 //if a graphic with same lat/long does exist, append job info to the graphics info template
               } else {
                 var newTemplate = new InfoTemplate();
-                newTemplate.setTitle("<b>${jobs} jobs in ${city}, ${state} (${latitude},${longitude})</b>");
+                newTemplate.setTitle("<b>${jobs} jobs in ${city}, ${state} (${longitude},${latitude})</b>");
                 var content = existingGraphic.infoTemplate.content;
                 var newContent = content + "<b><a href='" + results[i].url + "' target='_blank'>" + results[i].jobtitle + "</a></b><br>" + results[i].company + "<hr>";
                 newTemplate.setContent(newContent);
