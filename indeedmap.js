@@ -57,7 +57,7 @@ $(document).ready(function() {
       map.setInfoWindow(infoWindow);
 
       var template = new InfoTemplate();
-      template.setTitle("<b>${jobs} job in ${city}, ${state} (${longitude},${latitude})</b>");
+      template.setTitle("<b>${jobs} job in ${city}, ${state} (${latitude}, ${longitude})</b>");
       template.setContent("<b><a href='${url}' target='_blank'>${jobTitle}</a></b><br>${company}<hr>");
 
       var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 15,
@@ -194,7 +194,7 @@ $(document).ready(function() {
                 //if a graphic with same lat/long does exist, append job info to the graphics info template
               } else {
                 var newTemplate = new InfoTemplate();
-                newTemplate.setTitle("<b>${jobs} jobs in ${city}, ${state} (${longitude},${latitude})</b>");
+                newTemplate.setTitle("<b>${jobs} jobs in ${city}, ${state} (${latitude}, ${longitude})</b>");
                 var content = existingGraphic.infoTemplate.content;
                 var newContent = content + "<b><a href='" + results[i].url + "' target='_blank'>" + results[i].jobtitle + "</a></b><br>" + results[i].company + "<hr>";
                 newTemplate.setContent(newContent);
