@@ -219,7 +219,6 @@ $(document).ready(function() {
           url: "https://api.indeed.com/ads/apisearch",
           dataType: "jsonp",
           cache: false,
-          crossDomain: true,
           data: {
             publisher: 2916132883457866,
             format: "json",
@@ -268,7 +267,6 @@ $(document).ready(function() {
           url: "https://api.indeed.com/ads/apisearch",
           dataType: "jsonp",
           cache: false,
-          crossDomain: true,
           data: {
             publisher: 2916132883457866,
             format: "json",
