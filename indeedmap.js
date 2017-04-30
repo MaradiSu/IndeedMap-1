@@ -1,3 +1,5 @@
+
+
 $(document).ready(function() {
   require([
       "esri/map",
@@ -30,19 +32,17 @@ $(document).ready(function() {
       var jobsNoCoords = 0; //keeps track of the number of jobs w/o coords for search
       var resultsPerPage = 25; //25 is the max return per request
       var userAgent = navigator.userAgent;
-      var ip = "";
+      var ip = getUserIp();
 
       //Get the client IP address for sending requests to indeed api
-      $.ajax({
-        type: "GET",
-        url: "https://api.ipify.org?format=json",
-        success: function(result) {
-          ip = result.ip;
-        },
-        error: function() {
-          console.log("An error occurred retrieving the client IP address!");
-        }
-      });
+      function getUserIp() {
+		$.get("https://api.ipify.org?format=json", function(result) {
+			return result.ip
+		})	      
+		return undefined      
+	  }
+	
+      console.log(ip);
 
       //Map variables
       var map = new Map("map", {
