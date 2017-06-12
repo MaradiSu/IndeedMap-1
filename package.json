@@ -1,0 +1,12 @@
+{
+  "name": "jobsite",
+  "version": "1.0.0",
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babelify": "^7.3.0"
+  },
+  "scripts": {
+    "build": "browserify -t [ babelify ] js/modules/main.js -o js/dist/bundle.js"
+  }
+}

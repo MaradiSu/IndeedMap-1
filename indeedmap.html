@@ -3,29 +3,35 @@
 
   <head>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/3.16/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
     <link rel="stylesheet" href="indeedmap.css">
     <link href='https://fonts.googleapis.com/css?family=Fira+Sans:300' rel='stylesheet' type='text/css'>
-    <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+ 
+ 	<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-    <script src="https://js.arcgis.com/3.16/"></script>
-    <script type="text/javascript" src="http://gdc.indeed.com/ads/apiresults.js"></script>
+    
+    <script src="https://js.arcgis.com/3.20/"></script>
+
+<!--     <script type="text/javascript" src="http://gdc.indeed.com/ads/apiresults.js"></script> -->
+    <script src="js/dist/bundle.js"></script>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indeed Map</title>
   </head>
 
   <body>
-    <div id="main">
-      <ul>
-        <li id="search-btn" class="nav-btn">Search</li>
-        <li id="map-btn" class="nav-btn">Map</li>
-        <li id="details-btn" class="nav-btn">Details</li>
-      </ul>
-      <div id="search" class="pane">
-        <h1>A map based job search application</h1>
+    <div class="tabbed-panes">
+      <div class="tabs-container">
+        <div id="search-tab" class="tab tab-selected" data-target="search-pane">Search</div>
+        <div id="map-tab" class="tab" data-target="map-pane">Map</div>
+        <div id="details-tab" class="tab" data-target="details-pane">Details</div>
+      </div>
+      <div id="search-pane" class="pane">
+      	<h1>Jobsite</h1>
+        <h3>A map based job search application</h3>
         <p>powered by the Indeed Job API</p>
-        <input id="q" placeholder="search keywords" type="text"></input>
+        <input id="keywords" placeholder="search keywords" type="text"></input>
         <input id="city-state" placeholder="city, state" type="text"></input>
         <div class="select-style">
           <select id="radius">
@@ -54,7 +60,7 @@ href="http://www.indeed.com/" title="Job Search"><img
 src="http://www.indeed.com/p/jobsearch.gif" style="border: 0;
 vertical-align: middle;" alt="Indeed job search"></a></span>
       </div>
-      <div id="details" class="pane">
+      <div id="details-pane" class="pane">
         <p id="search-error">An error occurred for this search! All results may not de displayed.</p>
         <p id="total-jobs">Perform a job search to see its details.</p>
         <p id="total-jobs-no-coords"></p>
@@ -62,14 +68,10 @@ vertical-align: middle;" alt="Indeed job search"></a></span>
       </div>
     </div>
     <div id="map">
-      <div id="progress-overlay">
-        <div id="progress-container"></div>
-      </div>
+      <div id="progress-bar-container">
+      	<div id="progress-bar"></div>
+	  </div>
     </div>
-    <script src="indeedmap.js">
-
-
-    </script>
   </body>
 
 </html>
