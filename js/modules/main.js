@@ -1,9 +1,11 @@
-import {ProgressBar} from './ui/ProgressBar'
-import {JobFetcher} from './JobFetcher'
-import {SearchError} from './ui/SearchError'
-import {JobDataTransformer} from './JobDataTransformer'
-import {TabbedPanes} from './ui/TabbedPanes'
-import {JobMap} from './ui/JobMap'
+import {ProgressBar} from 'app/ui/ProgressBar'
+import {JobFetcher} from 'app/JobFetcher'
+import {SearchError} from 'app/ui/SearchError'
+import {JobDataTransformer} from 'app/JobDataTransformer'
+import {TabbedPanes} from 'app/ui/TabbedPanes'
+import Map from "esri/map"
+import $ from "jquery"
+import d3 from "d3"
 
 $(document).ready(() => {
 	
@@ -12,7 +14,13 @@ $(document).ready(() => {
 	new SearchError()
 	new JobDataTransformer()
 	new TabbedPanes($(".tabbed-panes"))
-	new JobMap($("#map"))
+	var map = new Map("map", {
+        center: [-98.35, 39.5],
+        zoom: 4,
+        basemap: "streets"
+      })
+    console.log(map)
+      
 })
 
 

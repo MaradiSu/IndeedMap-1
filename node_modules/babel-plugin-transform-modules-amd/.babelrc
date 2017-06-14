@@ -1,0 +1,8 @@
+{
+    "stage": 0,
+    "modules": "common",
+    "compact": false,
+    "ast": false,
+    "comments": false,
+    "externalHelpers": false
+}

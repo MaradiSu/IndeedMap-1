@@ -5,4 +5,8 @@
 \margl1440\margr1440\vieww12600\viewh10200\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\fs28 \cf0 run \'93npm run build\'94 to compile with babel}
+\f0\fs28 \cf0 run \'93npm run build\'94 to compile with babel\
+\
+this worked without arcgis javascript api require in package.json build\
+\
+"build": "browserify -t [ babelify ] js/modules/main.js -o js/dist/bundle.js"}
