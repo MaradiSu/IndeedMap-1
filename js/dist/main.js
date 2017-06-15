@@ -1,7 +1,15 @@
-require(['app/ui/ProgressBar', 'app/JobFetcher', 'app/ui/SearchError', 'app/JobDataTransformer', 'app/ui/TabbedPanes', 'esri/map', 'jquery', 'd3'], function (_ProgressBar, _JobFetcher, _SearchError, _JobDataTransformer, _TabbedPanes, _map, _jquery, _d) {
-	'use strict';
+require(["app/ui/ProgressBar", "app/JobFetcher", "app/ui/SearchError", "app/ui/TabbedPanes", "app/ui/JobMap", "jquery", "d3", "dojo/domReady"], function (_ProgressBar, _JobFetcher, _SearchError, _TabbedPanes, _JobMap, _jquery, _d) {
+	"use strict";
 
-	var _map2 = _interopRequireDefault(_map);
+	var _ProgressBar2 = _interopRequireDefault(_ProgressBar);
+
+	var _JobFetcher2 = _interopRequireDefault(_JobFetcher);
+
+	var _SearchError2 = _interopRequireDefault(_SearchError);
+
+	var _TabbedPanes2 = _interopRequireDefault(_TabbedPanes);
+
+	var _JobMap2 = _interopRequireDefault(_JobMap);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -13,18 +21,9 @@ require(['app/ui/ProgressBar', 'app/JobFetcher', 'app/ui/SearchError', 'app/JobD
 		};
 	}
 
-	(0, _jquery2.default)(document).ready(function () {
-
-		new _ProgressBar.ProgressBar((0, _jquery2.default)("#progress-bar-container"));
-		new _JobFetcher.JobFetcher();
-		new _SearchError.SearchError();
-		new _JobDataTransformer.JobDataTransformer();
-		new _TabbedPanes.TabbedPanes((0, _jquery2.default)(".tabbed-panes"));
-		var map = new _map2.default("map", {
-			center: [-98.35, 39.5],
-			zoom: 4,
-			basemap: "streets"
-		});
-		console.log(map);
-	});
+	new _ProgressBar2.default((0, _jquery2.default)("#progress-bar-container"));
+	new _JobFetcher2.default();
+	new _SearchError2.default();
+	new _TabbedPanes2.default((0, _jquery2.default)(".tabbed-panes"));
+	new _JobMap2.default((0, _jquery2.default)("#map"));
 });

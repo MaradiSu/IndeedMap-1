@@ -29,7 +29,7 @@ define(['exports'], function (exports) {
 		};
 	}();
 
-	var JobSearchForm = exports.JobSearchForm = function () {
+	var JobSearchForm = function () {
 		function JobSearchForm(jobSearchFormElem) {
 			_classCallCheck(this, JobSearchForm);
 
@@ -106,4 +106,6 @@ define(['exports'], function (exports) {
 
 		return JobSearchForm;
 	}();
+
+	exports.default = JobSearchForm;
 });

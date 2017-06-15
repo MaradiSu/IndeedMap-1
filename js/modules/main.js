@@ -1,28 +1,17 @@
-import {ProgressBar} from 'app/ui/ProgressBar'
-import {JobFetcher} from 'app/JobFetcher'
-import {SearchError} from 'app/ui/SearchError'
-import {JobDataTransformer} from 'app/JobDataTransformer'
-import {TabbedPanes} from 'app/ui/TabbedPanes'
-import Map from "esri/map"
+import ProgressBar from "app/ui/ProgressBar"
+import JobFetcher from "app/JobFetcher"
+import SearchError from "app/ui/SearchError"
+import TabbedPanes from "app/ui/TabbedPanes"
+import JobMap from "app/ui/JobMap"
 import $ from "jquery"
 import d3 from "d3"
-
-$(document).ready(() => {
+import "dojo/domReady"
 	
-	new ProgressBar($("#progress-bar-container")) 
-	new JobFetcher()
-	new SearchError()
-	new JobDataTransformer()
-	new TabbedPanes($(".tabbed-panes"))
-	var map = new Map("map", {
-        center: [-98.35, 39.5],
-        zoom: 4,
-        basemap: "streets"
-      })
-    console.log(map)
-      
-})
-
+new ProgressBar($("#progress-bar-container")) 
+new JobFetcher()
+new SearchError()
+new TabbedPanes($(".tabbed-panes"))
+new JobMap($("#map"))
 
 
 

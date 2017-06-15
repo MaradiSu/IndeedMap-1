@@ -29,7 +29,7 @@ define(["exports"], function (exports) {
 		};
 	}();
 
-	var IpFetcher = exports.IpFetcher = function () {
+	var IpFetcher = function () {
 		function IpFetcher(ip) {
 			_classCallCheck(this, IpFetcher);
 
@@ -51,4 +51,6 @@ define(["exports"], function (exports) {
 
 		return IpFetcher;
 	}();
+
+	exports.default = IpFetcher;
 });

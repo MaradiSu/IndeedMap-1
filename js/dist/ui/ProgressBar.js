@@ -4,7 +4,6 @@ define(["exports", "../utils/D3Utils"], function (exports, _D3Utils) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.ProgressBar = undefined;
 
 	var D3Utils = _interopRequireWildcard(_D3Utils);
 
@@ -49,7 +48,7 @@ define(["exports", "../utils/D3Utils"], function (exports, _D3Utils) {
 		};
 	}();
 
-	var ProgressBar = exports.ProgressBar = function () {
+	var ProgressBar = function () {
 		function ProgressBar(progressBarContainerElem) {
 			_classCallCheck(this, ProgressBar);
 
@@ -141,4 +140,6 @@ define(["exports", "../utils/D3Utils"], function (exports, _D3Utils) {
 
 		return ProgressBar;
 	}();
+
+	exports.default = ProgressBar;
 });

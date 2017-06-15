@@ -1,6 +1,6 @@
-import {IpFetcher} from './IpFetcher'
+import IpFetcher from './IpFetcher'
  
-export class JobFetcher {
+export default class JobFetcher {
 	constructor() {
 		this.jobsPerPage = 25
 		this.publisherId = 2916132883457866

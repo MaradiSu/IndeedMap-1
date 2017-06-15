@@ -1,4 +1,4 @@
-export class SearchError {
+export default class SearchError {
 	constructor() {
 		this.alertOnErrorEvent()
 	}

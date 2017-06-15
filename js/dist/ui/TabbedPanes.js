@@ -4,7 +4,14 @@ define(["exports", "../ui/JobSearchForm"], function (exports, _JobSearchForm) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.TabbedPanes = undefined;
+
+	var _JobSearchForm2 = _interopRequireDefault(_JobSearchForm);
+
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : {
+			default: obj
+		};
+	}
 
 	function _classCallCheck(instance, Constructor) {
 		if (!(instance instanceof Constructor)) {
@@ -30,7 +37,7 @@ define(["exports", "../ui/JobSearchForm"], function (exports, _JobSearchForm) {
 		};
 	}();
 
-	var TabbedPanes = exports.TabbedPanes = function () {
+	var TabbedPanes = function () {
 		function TabbedPanes(tabbedPaneElem) {
 			_classCallCheck(this, TabbedPanes);
 
@@ -46,7 +53,7 @@ define(["exports", "../ui/JobSearchForm"], function (exports, _JobSearchForm) {
 			key: "createJobSearchForm",
 			value: function createJobSearchForm() {
 				var searchPane = this.tabbedPaneElem.find("#search-pane");
-				this.jobSearchForm = new _JobSearchForm.JobSearchForm(searchPane);
+				this.jobSearchForm = new _JobSearchForm2.default(searchPane);
 			}
 		}, {
 			key: "displayPaneOnClickEvent",
@@ -93,4 +100,6 @@ define(["exports", "../ui/JobSearchForm"], function (exports, _JobSearchForm) {
 
 		return TabbedPanes;
 	}();
+
+	exports.default = TabbedPanes;
 });

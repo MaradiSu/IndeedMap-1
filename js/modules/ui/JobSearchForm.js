@@ -1,4 +1,4 @@
-export class JobSearchForm {
+export default class JobSearchForm {
 	constructor(jobSearchFormElem) {
 		this.jobSearchFormElem = jobSearchFormElem
 		this.formElems = this.jobSearchFormElem.find("select, input, button")

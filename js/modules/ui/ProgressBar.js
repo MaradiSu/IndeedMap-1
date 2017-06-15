@@ -1,6 +1,6 @@
 import * as D3Utils from '../utils/D3Utils'
 
-export class ProgressBar {
+export default class ProgressBar {
 	constructor(progressBarContainerElem) {
 		this.progressBarContainer = progressBarContainerElem
 		this.progressBar = d3.select(this.progressBarContainer.find("#progress-bar").get(0))

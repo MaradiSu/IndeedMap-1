@@ -1,4 +1,4 @@
-export class IpFetcher {
+export default class IpFetcher {
 	constructor(ip) {
 		this.fetchIp()
 	}

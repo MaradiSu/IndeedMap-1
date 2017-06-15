@@ -29,28 +29,25 @@ define(["exports"], function (exports) {
 		};
 	}();
 
-	var JobDataTransformer = exports.JobDataTransformer = function () {
-		function JobDataTransformer() {
+	var JobDataTransformer = function () {
+		function JobDataTransformer(searchResults) {
 			_classCallCheck(this, JobDataTransformer);
 
 			this.jobsNoCoords = [];
-			this.transformDataOnSearchCompleteEvent();
+
+			this.transformData(searchResults);
 		}
 
 		_createClass(JobDataTransformer, [{
-			key: "transformDataOnSearchCompleteEvent",
-			value: function transformDataOnSearchCompleteEvent() {
-				var _this = this;
-
-				$(document).on('search-complete', function (event, searchResults) {
-					var uniqueJobs = _this.getUniqueJobs(searchResults);
-					var uniqueCoords = _this.extractUniqueCoordinates(uniqueJobs);
-					_this.locations = _this.parseLocations(uniqueCoords);
-					_this.addJobsToLocations(searchResults);
-					_this.addCityStateToLocations();
-					console.log(_this.locations);
-					console.log(_this.jobsNoCoords);
-				});
+			key: "transformData",
+			value: function transformData(searchResults) {
+				var uniqueJobs = this.getUniqueJobs(searchResults);
+				var uniqueCoords = this.extractUniqueCoordinates(uniqueJobs);
+				this.locations = this.parseLocations(uniqueCoords);
+				this.addJobsToLocations(searchResults);
+				this.addCityStateToLocations();
+				console.log(this.locations);
+				console.log(this.jobsNoCoords);
 			}
 		}, {
 			key: "getUniqueJobs",
@@ -211,4 +208,6 @@ define(["exports"], function (exports) {
 
 		return JobDataTransformer;
 	}();
+
+	exports.default = JobDataTransformer;
 });

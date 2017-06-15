@@ -1,6 +1,6 @@
-import {JobSearchForm} from '../ui/JobSearchForm'
+import JobSearchForm from '../ui/JobSearchForm'
 
-export class TabbedPanes {
+export default class TabbedPanes {
 	constructor(tabbedPaneElem) {
 		this.tabbedPaneElem = tabbedPaneElem
 		this.tabs = this.tabbedPaneElem.find(".tab")

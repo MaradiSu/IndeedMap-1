@@ -1,19 +1,18 @@
-export class JobDataTransformer {
-	constructor() {
+export default class JobDataTransformer {
+	constructor(searchResults) {
 		this.jobsNoCoords = []
-		this.transformDataOnSearchCompleteEvent()
+		
+		this.transformData(searchResults)
 	}
 	
-	transformDataOnSearchCompleteEvent() {
-		$(document).on('search-complete', (event, searchResults) => {
-			var uniqueJobs = this.getUniqueJobs(searchResults)
-			var uniqueCoords = this.extractUniqueCoordinates(uniqueJobs)
-			this.locations = this.parseLocations(uniqueCoords)
-			this.addJobsToLocations(searchResults)
-			this.addCityStateToLocations()
-			console.log(this.locations)
-			console.log(this.jobsNoCoords)
-		})
+	transformData(searchResults) {
+		var uniqueJobs = this.getUniqueJobs(searchResults)
+		var uniqueCoords = this.extractUniqueCoordinates(uniqueJobs)
+		this.locations = this.parseLocations(uniqueCoords)
+		this.addJobsToLocations(searchResults)
+		this.addCityStateToLocations()
+		console.log(this.locations)
+		console.log(this.jobsNoCoords)
 	}
 	
 	getUniqueJobs(searchResults) {

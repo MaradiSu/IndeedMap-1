@@ -8,6 +8,6 @@
     "babelify": "^7.3.0"
   },
   "scripts": {
-    "build": "babel js/modules --out-dir js/dist"
+    "build": "babel js/modules --out-dir js/dist && python main_define_to_require.py"
   }
 }

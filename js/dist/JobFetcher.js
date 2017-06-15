@@ -4,7 +4,14 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.JobFetcher = undefined;
+
+	var _IpFetcher2 = _interopRequireDefault(_IpFetcher);
+
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : {
+			default: obj
+		};
+	}
 
 	function _classCallCheck(instance, Constructor) {
 		if (!(instance instanceof Constructor)) {
@@ -30,7 +37,7 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 		};
 	}();
 
-	var JobFetcher = exports.JobFetcher = function () {
+	var JobFetcher = function () {
 		function JobFetcher() {
 			_classCallCheck(this, JobFetcher);
 
@@ -39,7 +46,7 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 			this.version = 2;
 			this.country = "us";
 			this.returnLatLong = 1;
-			this.ipFetcher = new _IpFetcher.IpFetcher();
+			this.ipFetcher = new _IpFetcher2.default();
 
 			this.fetchRequestParamsOnSearchEvent();
 		}
@@ -162,4 +169,6 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 
 		return JobFetcher;
 	}();
+
+	exports.default = JobFetcher;
 });

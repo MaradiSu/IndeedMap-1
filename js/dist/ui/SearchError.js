@@ -29,7 +29,7 @@ define(['exports'], function (exports) {
 		};
 	}();
 
-	var SearchError = exports.SearchError = function () {
+	var SearchError = function () {
 		function SearchError() {
 			_classCallCheck(this, SearchError);
 
@@ -47,4 +47,6 @@ define(['exports'], function (exports) {
 
 		return SearchError;
 	}();
+
+	exports.default = SearchError;
 });
