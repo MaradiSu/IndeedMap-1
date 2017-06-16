@@ -10,7 +10,7 @@ import "dojo/domReady"
 new ProgressBar($("#progress-bar-container")) 
 new JobFetcher()
 new SearchError()
-new TabbedPanes($(".tabbed-panes"))
+console.log(new TabbedPanes($(".tabbed-panes")))
 new JobMap($("#map"))
 
 

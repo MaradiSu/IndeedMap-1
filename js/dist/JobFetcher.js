@@ -1,4 +1,4 @@
-define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
+define(['exports', './IpFetcher', './JobDataTransformer'], function (exports, _IpFetcher, _JobDataTransformer) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -6,6 +6,8 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 	});
 
 	var _IpFetcher2 = _interopRequireDefault(_IpFetcher);
+
+	var _JobDataTransformer2 = _interopRequireDefault(_JobDataTransformer);
 
 	function _interopRequireDefault(obj) {
 		return obj && obj.__esModule ? obj : {
@@ -58,8 +60,9 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 
 				$(document).on('search', function (event, searchParams) {
 					_this.jobs = [];
+					_this.searchParams = searchParams;
 
-					_this.searchData = {
+					_this.ajaxData = {
 						publisher: _this.publisherId,
 						format: "json",
 						v: _this.version,
@@ -85,7 +88,7 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 				$.ajax({
 					url: "https://api.indeed.com/ads/apisearch",
 					dataType: "jsonp",
-					data: this.searchData,
+					data: this.ajaxData,
 					success: function success(results) {
 						var requestParams = _this2.getRequestParameters(results);
 						if (_this2.totalJobsFound > 20000) {
@@ -125,9 +128,9 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 			value: function fetchJobs(requestParams) {
 				for (var page = 0; page < requestParams.numPages; page++) {
 					var lastPage = requestParams.numPages - 1;
-					this.searchData.start = page * this.jobsPerPage;
+					this.ajaxData.start = page * this.jobsPerPage;
 					if (page == lastPage) {
-						this.searchData.limit = requestParams.numResultsLastPage;
+						this.ajaxData.limit = requestParams.numResultsLastPage;
 					}
 					this.fetchPage(requestParams);
 				}
@@ -140,7 +143,7 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 				$.ajax({
 					url: "https://api.indeed.com/ads/apisearch",
 					dataType: "jsonp",
-					data: this.searchData,
+					data: this.ajaxData,
 					success: function success(results) {
 						_this3.jobs = _this3.jobs.concat(results.results);
 						_this3.triggerRequestComplete(requestParams);
@@ -157,13 +160,19 @@ define(['exports', './IpFetcher'], function (exports, _IpFetcher) {
 				var percentComplete = requestParams.pageRequestsFinished / requestParams.numPages;
 				$(document).trigger("page-request-complete", [percentComplete]);
 				if (requestParams.pageRequestsFinished == requestParams.numPages) {
-					this.triggerJobFetchComplete();
+					this.transformData();
 				}
 			}
 		}, {
+			key: 'transformData',
+			value: function transformData() {
+				this.transformedData = new _JobDataTransformer2.default(this.jobs);
+				this.triggerJobFetchComplete();
+			}
+		}, {
 			key: 'triggerJobFetchComplete',
-			value: function triggerJobFetchComplete() {
-				$(document).trigger("search-complete", [this.jobs]);
+			value: function triggerJobFetchComplete(transformedData) {
+				$(document).trigger("search-complete", [this.transformedData, this.searchParams]);
 			}
 		}]);
 

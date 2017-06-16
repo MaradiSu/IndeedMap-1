@@ -24,6 +24,6 @@ require(["app/ui/ProgressBar", "app/JobFetcher", "app/ui/SearchError", "app/ui/T
 	new _ProgressBar2.default((0, _jquery2.default)("#progress-bar-container"));
 	new _JobFetcher2.default();
 	new _SearchError2.default();
-	new _TabbedPanes2.default((0, _jquery2.default)(".tabbed-panes"));
+	console.log(new _TabbedPanes2.default((0, _jquery2.default)(".tabbed-panes")));
 	new _JobMap2.default((0, _jquery2.default)("#map"));
 });

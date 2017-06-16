@@ -1,4 +1,5 @@
 import IpFetcher from './IpFetcher'
+import JobDataTransformer from './JobDataTransformer'
  
 export default class JobFetcher {
 	constructor() {
@@ -15,8 +16,9 @@ export default class JobFetcher {
 	fetchRequestParamsOnSearchEvent() {
 		$(document).on('search', (event, searchParams) => {
 			this.jobs = []
+			this.searchParams = searchParams
 			
-			this.searchData = {
+			this.ajaxData = {
 				publisher: this.publisherId,
 				format: "json",
 				v: this.version,
@@ -39,7 +41,7 @@ export default class JobFetcher {
 		$.ajax({
           url: "https://api.indeed.com/ads/apisearch",
           dataType: "jsonp",
-          data: this.searchData,
+          data: this.ajaxData,
           success: (results) => {
           	var requestParams = this.getRequestParameters(results)
           	if(this.totalJobsFound > 20000) {
@@ -76,9 +78,9 @@ export default class JobFetcher {
 	fetchJobs(requestParams) {
 		for(var page=0; page<requestParams.numPages; page++) {
 			var lastPage = requestParams.numPages - 1
-			this.searchData.start = page * this.jobsPerPage
+			this.ajaxData.start = page * this.jobsPerPage
 			if (page == lastPage) {
-				this.searchData.limit = requestParams.numResultsLastPage
+				this.ajaxData.limit = requestParams.numResultsLastPage
 			}
 			this.fetchPage(requestParams)
 		}
@@ -88,7 +90,7 @@ export default class JobFetcher {
 		$.ajax({
 			url: "https://api.indeed.com/ads/apisearch",
 			dataType: "jsonp",
-			data: this.searchData,
+			data: this.ajaxData,
 			success: (results) => {
 				this.jobs = this.jobs.concat(results.results)
 				this.triggerRequestComplete(requestParams)
@@ -102,11 +104,16 @@ export default class JobFetcher {
 		var percentComplete = requestParams.pageRequestsFinished / requestParams.numPages
 		$(document).trigger("page-request-complete", [percentComplete])
 		if (requestParams.pageRequestsFinished == requestParams.numPages) {
-			this.triggerJobFetchComplete()
+			this.transformData()
 		}
 	}
 	
-	triggerJobFetchComplete() {
-		$(document).trigger("search-complete", [this.jobs])
+	transformData() {
+		this.transformedData = new JobDataTransformer(this.jobs)
+		this.triggerJobFetchComplete()
+	}
+	
+	triggerJobFetchComplete(transformedData) {
+		$(document).trigger("search-complete", [this.transformedData, this.searchParams])
 	}
 }	

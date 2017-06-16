@@ -108,9 +108,8 @@ define(["exports", "app/JobDataTransformer", "esri/map", "esri/Color", "esri/sym
 			value: function addPointsOnSearchEvent() {
 				var _this = this;
 
-				$(document).on('search-complete', function (event, searchResults) {
+				$(document).on('search-complete', function (event, transformedData) {
 					_this.jobsGraphicsLayer.clear();
-					var transformedData = new _JobDataTransformer2.default(searchResults);
 					_this.addPointsToJobsLayer(transformedData.locations);
 				});
 			}

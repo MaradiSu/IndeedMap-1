@@ -56,9 +56,8 @@ export default class JobMap {
 	}
 	
 	addPointsOnSearchEvent() {
-		$(document).on('search-complete', (event, searchResults) => {
+		$(document).on('search-complete', (event, transformedData) => {
 			this.jobsGraphicsLayer.clear()
-			var transformedData = new JobDataTransformer(searchResults)
 			this.addPointsToJobsLayer(transformedData.locations)
 		})
 	}
