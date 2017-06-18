@@ -81,7 +81,7 @@ define(["exports", "app/JobDataTransformer", "esri/map", "esri/Color", "esri/sym
 		}, {
 			key: "createInfoWindow",
 			value: function createInfoWindow() {
-				this.infoWindow = new _InfoWindowLite2.default(null, _domConstruct2.default.create("div", null, null, map.root));
+				this.infoWindow = new _InfoWindowLite2.default(null, _domConstruct2.default.create("div", null, null, this.map.root));
 				this.infoWindow.startup();
 				this.map.setInfoWindow(this.infoWindow);
 			}

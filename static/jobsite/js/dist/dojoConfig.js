@@ -4,7 +4,7 @@ var dojoConfig = {
   packages: [
   	{
     	name: 'app',
-    	location: locationPath + '/js/dist'
+    	location: locationPath + '/static/jobsite/js/dist'
   	},
   	{
     	name: 'jquery',

@@ -30,7 +30,7 @@ export default class JobMap {
 	}
 	
 	createInfoWindow() {
-		this.infoWindow = new InfoWindowLite(null, domConstruct.create("div", null, null, map.root))
+		this.infoWindow = new InfoWindowLite(null, domConstruct.create("div", null, null, this.map.root))
       	this.infoWindow.startup()
       	this.map.setInfoWindow(this.infoWindow)
 	}

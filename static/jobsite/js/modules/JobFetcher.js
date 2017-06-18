@@ -46,14 +46,14 @@ export default class JobFetcher {
           	var requestParams = this.getRequestParameters(results)
           	if(this.totalJobsFound > 20000) {
           		var errorMessage = "Your search returned greater than 20,000 results! Please use more specific search criteria to limit the jobs returned."
-          		$(document).trigger('search-error', [errorMessage])
+          		this.triggerSearchError(errorMessage)
           	} else {
           		this.fetchJobs(requestParams)
           	}
           },
           error: () => {
           	var errorMessage = "Your search returned greater than 20,000 results! Please use more specific search criteria to limit the jobs returned."
-          	this.triggerSearchError(message)
+          	this.triggerSearchError(errorMessage)
           }
         })
 	}

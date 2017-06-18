@@ -42,11 +42,17 @@ define(["exports", "../ui/JobSearchForm"], function (exports, _JobSearchForm) {
 			_classCallCheck(this, TabbedPanes);
 
 			this.tabbedPaneElem = tabbedPaneElem;
+
 			this.tabs = this.tabbedPaneElem.find(".tab");
+			this.mapTap = this.tabs.filter("#map-tab");
+			this.searchTab = this.tabs.filter("#search-tab");
+			this.detailsTab = this.tabs.filter("#details-tab");
+
 			this.panes = this.tabbedPaneElem.find(".pane");
 			this.searchPane = this.panes.filter("#search-pane");
-
 			this.detailsPane = this.panes.filter("#details-pane");
+			this.mapPane = this.panes.filter("#map-pane");
+
 			this.totalJobsElem = this.detailsPane.find("#total-jobs");
 			this.totalJobsNoCoordsElem = this.detailsPane.find("#total-jobs-no-coords");
 			this.jobsNoCoordsContainer = this.detailsPane.find("#jobs-no-coords");
@@ -54,6 +60,8 @@ define(["exports", "../ui/JobSearchForm"], function (exports, _JobSearchForm) {
 			this.createJobSearchForm();
 			this.displayPaneOnClickEvent();
 			this.changeDetailsOnSearchCompleteEvent();
+			this.showMapOnResizeEvent();
+			this.showMapOnSearchEvent();
 		}
 
 		_createClass(TabbedPanes, [{
@@ -83,16 +91,26 @@ define(["exports", "../ui/JobSearchForm"], function (exports, _JobSearchForm) {
 			key: "showPane",
 			value: function showPane(paneId) {
 				this.hidePanes();
-				this.panes.each(function (_, pane) {
-					if ($(pane).attr('id') == paneId) {
-						$(pane).show();
-					}
+				var pane = this.panes.filter(function (_, pane) {
+					return $(pane).attr('id') == paneId;
 				});
+				if (paneId == 'map-pane') {
+					pane.css('display', 'flex');
+				} else {
+					pane.show();
+				}
 			}
 		}, {
 			key: "hidePanes",
 			value: function hidePanes() {
-				this.panes.hide();
+				this.panes.each(function (_, pane) {
+					var paneId = $(pane).attr('id');
+					if (paneId == 'map-pane' && $("#map-tab[data-target=\"" + paneId + "\"]").is(":visible")) {
+						$(pane).hide();
+					} else if (paneId != 'map-pane') {
+						$(pane).hide();
+					}
+				});
 			}
 		}, {
 			key: "reassignTabSelectStyle",
@@ -202,6 +220,25 @@ define(["exports", "../ui/JobSearchForm"], function (exports, _JobSearchForm) {
 			value: function clearJobsNoCoordsHtml() {
 				this.totalJobsNoCoordsElem.html("");
 				this.jobsNoCoordsContainer.html("");
+			}
+		}, {
+			key: "showMapOnResizeEvent",
+			value: function showMapOnResizeEvent() {
+				$(window).resize(function () {
+					if (!$("#map-tab").is(":visible")) {
+						$("#map-tab").css("display", "flex");
+						$("#search-tab").trigger("click");
+					}
+				});
+			}
+		}, {
+			key: "showMapOnSearchEvent",
+			value: function showMapOnSearchEvent() {
+				$(document).on('search', function () {
+					if ($("#map-tab").is(":visible")) {
+						$("#map-tab").trigger("click");
+					}
+				});
 			}
 		}]);
 
