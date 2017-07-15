@@ -132,7 +132,7 @@ define(["exports", "../utils/D3Utils"], function (exports, _D3Utils) {
 			value: function hideOnSearchCompleteEvent() {
 				var _this3 = this;
 
-				$(document).on('search-complete', function () {
+				$(document).on('search-complete search-error', function () {
 					_this3.progressBarContainer.css("display", "none");
 				});
 			}

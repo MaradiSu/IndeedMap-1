@@ -78,7 +78,7 @@ export default class ProgressBar {
 	}
 	
 	hideOnSearchCompleteEvent() {
-		$(document).on('search-complete', () => {
+		$(document).on('search-complete search-error', () => {
 			this.progressBarContainer.css("display", "none")
 		})
 	}

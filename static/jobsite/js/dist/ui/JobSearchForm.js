@@ -96,7 +96,7 @@ define(['exports'], function (exports) {
 			value: function enableFormOnSearchCompleteEvent() {
 				var _this4 = this;
 
-				$(document).on('search-complete', function () {
+				$(document).on('search-complete search-error', function () {
 					_this4.formElems.each(function (_, elem) {
 						$(elem).prop('disabled', false);
 					});

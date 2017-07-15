@@ -91,15 +91,18 @@ define(['exports', './IpFetcher', './JobDataTransformer'], function (exports, _I
 					data: this.ajaxData,
 					success: function success(results) {
 						var requestParams = _this2.getRequestParameters(results);
-						if (_this2.totalJobsFound > 20000) {
+						if (requestParams.totalJobsFound > 20000) {
 							var errorMessage = "Your search returned greater than 20,000 results! Please use more specific search criteria to limit the jobs returned.";
+							_this2.triggerSearchError(errorMessage);
+						} else if (requestParams.totalJobsFound == 0) {
+							var errorMessage = "No jobs were found for your search!";
 							_this2.triggerSearchError(errorMessage);
 						} else {
 							_this2.fetchJobs(requestParams);
 						}
 					},
 					error: function error() {
-						var errorMessage = "Your search returned greater than 20,000 results! Please use more specific search criteria to limit the jobs returned.";
+						var errorMessage = "There was an error contacting the Indeed Job API.";
 						_this2.triggerSearchError(errorMessage);
 					}
 				});

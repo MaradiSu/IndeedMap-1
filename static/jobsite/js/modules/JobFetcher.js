@@ -44,15 +44,18 @@ export default class JobFetcher {
           data: this.ajaxData,
           success: (results) => {
           	var requestParams = this.getRequestParameters(results)
-          	if(this.totalJobsFound > 20000) {
+          	if(requestParams.totalJobsFound > 20000) {
           		var errorMessage = "Your search returned greater than 20,000 results! Please use more specific search criteria to limit the jobs returned."
+          		this.triggerSearchError(errorMessage)
+          	} else if(requestParams.totalJobsFound == 0) {
+          		var errorMessage = "No jobs were found for your search!"
           		this.triggerSearchError(errorMessage)
           	} else {
           		this.fetchJobs(requestParams)
           	}
           },
           error: () => {
-          	var errorMessage = "Your search returned greater than 20,000 results! Please use more specific search criteria to limit the jobs returned."
+          	var errorMessage = "There was an error contacting the Indeed Job API."
           	this.triggerSearchError(errorMessage)
           }
         })
