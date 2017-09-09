@@ -1,5 +1,5 @@
 export function createArc(startAngle, endAngle, innerRadius, outerRadius) {
-	var arc = d3.svg.arc()
+	var arc = d3.arc()
         .startAngle(startAngle)
         .endAngle(endAngle)
         .innerRadius(innerRadius)

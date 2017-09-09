@@ -1,20 +1,19 @@
-import JobDataTransformer from "app/JobDataTransformer"
-
-import Map from "esri/map"
-import Color from "esri/Color"
-import SimpleMarkerSymbol from "esri/symbols/SimpleMarkerSymbol"
-import SimpleLineSymbol from "esri/symbols/SimpleLineSymbol"
-import Graphic from "esri/graphic"
-import GraphicsLayer from "esri/layers/GraphicsLayer"
-import Point from "esri/geometry/Point" 
-import InfoWindowLite from "esri/dijit/InfoWindowLite"
-import InfoTemplate from "esri/InfoTemplate"
-import domConstruct from "dojo/dom-construct"
+import JobDataTransformer from "../JobDataTransformer"
+import ModuleLoader from "./ModuleLoader"
 
 export default class JobMap {
 	constructor(jobMapElem) {
 		this.jobMapContainer = jobMapElem
-		this.createMap()
+		this.modules = new ModuleLoader()
+		this.initMapOnModulesLoadedEvent()
+	}
+
+	initMapOnModulesLoadedEvent() {
+		$(document).on("esri-modules-loaded", () => this.initMap())
+	}
+ 
+	initMap() {
+	    this.createMap()
 		this.createInfoWindow()
 		this.createLayers()
 		this.createSymbols()
@@ -22,7 +21,7 @@ export default class JobMap {
 	}
 	
 	createMap() {
-		this.map = new Map(this.jobMapContainer[0], {
+		this.map = new this.modules.Map(this.jobMapContainer[0], {
 			center: [-98.35, 39.5],
 			zoom: 4,
 			basemap: "streets"
@@ -30,28 +29,28 @@ export default class JobMap {
 	}
 	
 	createInfoWindow() {
-		this.infoWindow = new InfoWindowLite(null, domConstruct.create("div", null, null, this.map.root))
+		this.infoWindow = new this.modules.InfoWindowLite(null, this.modules.domConstruct.create("div", null, null, this.map.root))
       	this.infoWindow.startup()
       	this.map.setInfoWindow(this.infoWindow)
 	}
 	
 	createLayers() {
-		this.jobsGraphicsLayer = new GraphicsLayer({
+		this.jobsGraphicsLayer = new this.modules.GraphicsLayer({
 			id: "Jobs"
 		});
 		this.map.addLayer(this.jobsGraphicsLayer)
 	}
 	
 	createSymbols() {
-		var blue = new Color([49, 99, 242])
-		var transparentBlue = new Color([49, 99, 242, 0.25])
+		var blue = new this.modules.Color([49, 99, 242])
+		var transparentBlue = new this.modules.Color([49, 99, 242, 0.25])
 		
-		this.symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 15,
-        	new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,blue, 1),
+		this.symbol = new this.modules.SimpleMarkerSymbol(this.modules.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+        	new this.modules.SimpleLineSymbol(this.modules.SimpleLineSymbol.STYLE_SOLID,blue, 1),
         	transparentBlue)
         
-		this.selectSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 15,
-        	new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,blue, 1),
+		this.selectSymbol = new this.modules.SimpleMarkerSymbol(this.modules.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+        	new this.modules.SimpleLineSymbol(this.modules.SimpleLineSymbol.STYLE_SOLID,blue, 1),
         	blue)
 	}
 	
@@ -70,7 +69,7 @@ export default class JobMap {
 	}
 	
 	createPointGraphic(location) {
-        var point = new Point(location.longitude, location.latitude)
+        var point = new this.modules.Point(location.longitude, location.latitude)
         var attributes = {
         	longitude: location.longitude,
         	latitude: location.latitude,
@@ -79,13 +78,13 @@ export default class JobMap {
         	jobs: location.jobs.length
         }
         
-        var graphic = new Graphic(point, this.symbol, attributes, this.createInfoTemplate(location))
+        var graphic = new this.modules.Graphic(point, this.symbol, attributes, this.createInfoTemplate(location))
         
         return graphic
 	}
 	
 	createInfoTemplate(location) {
-		return new InfoTemplate({
+		return new this.modules.InfoTemplate({
 			title: "<b>${jobs} job in ${city}, ${state} (${latitude}, ${longitude})</b>",
 			content: this.generateInfoTemplateContent(location)
 		})

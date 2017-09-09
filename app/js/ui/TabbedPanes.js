@@ -1,4 +1,4 @@
-import JobSearchForm from '../ui/JobSearchForm'
+import JobSearchForm from './JobSearchForm'
 
 export default class TabbedPanes {
 	constructor(tabbedPaneElem) {
