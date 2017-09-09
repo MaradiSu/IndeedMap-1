@@ -3,17 +3,13 @@ A web application that displays Indeed job searches on a map using the ESRI Java
 
 The application can be viewed at http://derekevans.herokuapp.com/jobsite/.
 
-# Development
-Note: Must have npm.  
-
-## Install dependencies
-"npm install"
-
 ## Development
+Must have npm.  
 
-"npm run build" to compile code into app/js-dist/bundle.js
-	
+"npm install" to install dependencies.
 
-"npm run watch" to compile code into app/js-dist/bundle.js as it is changed.
+"npm run build" to transform ES6 to ES5 and output to app/js-dist/bundle.js.
+
+"npm run watch" to transform ES6 to ES5 and output to app/js-dist/bundle.js as it is modified.
 
 
