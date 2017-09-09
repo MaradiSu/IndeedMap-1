@@ -62,7 +62,7 @@ export default class JobFetcher {
 	}
 	
 	triggerSearchError(message) {
-		$(document).trigger('search-error', [message])
+		$(document).trigger('error', [message])
 	}
 	
 	getRequestParameters(results) {

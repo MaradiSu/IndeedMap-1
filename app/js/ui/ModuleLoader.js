@@ -9,7 +9,6 @@ export default class ModuleLoader {
 		    this.loadModules()
 		  }
 		},{
-    		// use a specific version instead of latest 4.x
     		url: 'https://js.arcgis.com/3.21/'
   		})
 	}

@@ -5,6 +5,7 @@ export default class JobMap {
 	constructor(jobMapElem) {
 		this.jobMapContainer = jobMapElem
 		this.modules = new ModuleLoader()
+		
 		this.initMapOnModulesLoadedEvent()
 	}
 

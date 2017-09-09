@@ -47,7 +47,7 @@ export default class JobSearchForm {
 	}
 	
 	enableFormOnSearchCompleteEvent() {
-		$(document).on('search-complete search-error', () => {
+		$(document).on('search-complete error', () => {
 			this.formElems.each((_,elem) => {
 				$(elem).prop('disabled', false)
 			})

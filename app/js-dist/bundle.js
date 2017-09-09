@@ -319,7 +319,7 @@ var JobFetcher = function () {
 	}, {
 		key: 'triggerSearchError',
 		value: function triggerSearchError(message) {
-			$(document).trigger('search-error', [message]);
+			$(document).trigger('error', [message]);
 		}
 	}, {
 		key: 'getRequestParameters',
@@ -404,9 +404,9 @@ var _JobFetcher = require("./JobFetcher");
 
 var _JobFetcher2 = _interopRequireDefault(_JobFetcher);
 
-var _SearchError = require("./ui/SearchError");
+var _Error = require("./ui/Error");
 
-var _SearchError2 = _interopRequireDefault(_SearchError);
+var _Error2 = _interopRequireDefault(_Error);
 
 var _TabbedPanes = require("./ui/TabbedPanes");
 
@@ -421,12 +421,44 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 $(document).ready(function () {
 	new _ProgressBar2.default($("#progress-bar-container"));
 	new _JobFetcher2.default();
-	new _SearchError2.default();
+	new _Error2.default();
 	new _TabbedPanes2.default($(".tabbed-panes"));
 	new _JobMap2.default($("#map-pane"));
 });
 
-},{"./JobFetcher":3,"./ui/JobMap":5,"./ui/ProgressBar":8,"./ui/SearchError":9,"./ui/TabbedPanes":10}],5:[function(require,module,exports){
+},{"./JobFetcher":3,"./ui/Error":5,"./ui/JobMap":6,"./ui/ProgressBar":9,"./ui/TabbedPanes":10}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Error = function () {
+	function Error() {
+		_classCallCheck(this, Error);
+
+		this.alertOnErrorEvent();
+	}
+
+	_createClass(Error, [{
+		key: 'alertOnErrorEvent',
+		value: function alertOnErrorEvent() {
+			$(document).on('error', function (event, message) {
+				alert(message);
+			});
+		}
+	}]);
+
+	return Error;
+}();
+
+exports.default = Error;
+
+},{}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -453,6 +485,7 @@ var JobMap = function () {
 
 		this.jobMapContainer = jobMapElem;
 		this.modules = new _ModuleLoader2.default();
+
 		this.initMapOnModulesLoadedEvent();
 	}
 
@@ -590,7 +623,7 @@ var JobMap = function () {
 
 exports.default = JobMap;
 
-},{"../JobDataTransformer":2,"./ModuleLoader":7}],6:[function(require,module,exports){
+},{"../JobDataTransformer":2,"./ModuleLoader":8}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -668,7 +701,7 @@ var JobSearchForm = function () {
 		value: function enableFormOnSearchCompleteEvent() {
 			var _this4 = this;
 
-			$(document).on('search-complete search-error', function () {
+			$(document).on('search-complete error', function () {
 				_this4.formElems.each(function (_, elem) {
 					$(elem).prop('disabled', false);
 				});
@@ -681,7 +714,7 @@ var JobSearchForm = function () {
 
 exports.default = JobSearchForm;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -711,7 +744,6 @@ var ModuleLoader = function () {
                 _this.loadModules();
             }
         }, {
-            // use a specific version instead of latest 4.x
             url: 'https://js.arcgis.com/3.21/'
         });
     }
@@ -748,7 +780,7 @@ var ModuleLoader = function () {
 
 exports.default = ModuleLoader;
 
-},{"esri-loader":12}],8:[function(require,module,exports){
+},{"esri-loader":12}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -849,7 +881,7 @@ var ProgressBar = function () {
 		value: function hideOnSearchCompleteEvent() {
 			var _this3 = this;
 
-			$(document).on('search-complete search-error', function () {
+			$(document).on('search-complete error', function () {
 				_this3.progressBarContainer.css("display", "none");
 			});
 		}
@@ -860,39 +892,7 @@ var ProgressBar = function () {
 
 exports.default = ProgressBar;
 
-},{"../utils/D3Utils":11}],9:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var SearchError = function () {
-	function SearchError() {
-		_classCallCheck(this, SearchError);
-
-		this.alertOnErrorEvent();
-	}
-
-	_createClass(SearchError, [{
-		key: 'alertOnErrorEvent',
-		value: function alertOnErrorEvent() {
-			$(document).on('search-error', function (event, message) {
-				alert(message);
-			});
-		}
-	}]);
-
-	return SearchError;
-}();
-
-exports.default = SearchError;
-
-},{}],10:[function(require,module,exports){
+},{"../utils/D3Utils":11}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1119,7 +1119,7 @@ var TabbedPanes = function () {
 
 exports.default = TabbedPanes;
 
-},{"./JobSearchForm":6}],11:[function(require,module,exports){
+},{"./JobSearchForm":7}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

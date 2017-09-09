@@ -1,10 +1,10 @@
-export default class SearchError {
+export default class Error {
 	constructor() {
 		this.alertOnErrorEvent()
 	}
 	
 	alertOnErrorEvent() {
-		$(document).on('search-error', (event, message) => {
+		$(document).on('error', (event, message) => {
 			alert(message)
 		})
 	}
