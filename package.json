@@ -8,7 +8,7 @@
     "babelify": "^7.3.0"
   },
   "scripts": {
-    "build": "babel ./static/jobsite/js/modules --out-dir ./static/jobsite/js/dist && python main_define_to_require.py ./static/jobsite/js/dist/main.js",
+    "build": "babel ./app/js --out-dir ./app/js-dist && python main_define_to_require.py ./app/js-dist/main.js",
     "build-django": "npm run build && cp -r ./templates ../DjangoWebsite/jobsite && cp -r ./static ../DjangoWebsite/jobsite"
   }
 }
