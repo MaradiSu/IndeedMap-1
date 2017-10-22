@@ -1,46 +1,47 @@
 export default class JobDataTransformer {
 	constructor(searchResults) {
 		this.jobsNoCoords = []
+		this.searchResults = searchResults
 		
-		this.transformData(searchResults)
+		this.transformData()
 	}
 	
-	transformData(searchResults) {
-		var uniqueJobs = this.getUniqueJobs(searchResults)
+	transformData() {
+		var uniqueJobs = this.getUniqueJobs()
 		var uniqueCoords = this.extractUniqueCoordinates(uniqueJobs)
 		this.locations = this.parseLocations(uniqueCoords)
-		this.addJobsToLocations(searchResults)
+		this.addJobsToLocations(uniqueJobs)
 		this.addCityStateToLocations()
 		console.log(this.locations)
 		console.log(this.jobsNoCoords)
 	}
 	
-	getUniqueJobs(searchResults) {
-		var uniqueJobKeys = this.getUniqueJobKeys(searchResults)
+	getUniqueJobs() {
+		var uniqueJobKeys = this.getUniqueJobKeys()
 		var uniqueJobs = []
 		for (var key of uniqueJobKeys) {
-			var jobs = searchResults.filter((job) => job.jobkey == key)
+			var jobs = this.searchResults.filter((job) => job.jobkey == key)
 			if (jobs.length > 0) {
 				uniqueJobs = uniqueJobs.concat(jobs[0])
 			}
 		}
 		
-		console.log("total jobs found: " + searchResults.length)
+		console.log("total jobs found: " + this.searchResults.length)
 		console.log("total unique jobs found: " + uniqueJobs.length)
 		return uniqueJobs
 	}
 	
-	getUniqueJobKeys(searchResults) {
+	getUniqueJobKeys() {
 		var jobKeys = new Set()
-		for (var result of searchResults) {
+		for (var result of this.searchResults) {
 			jobKeys.add(result.jobkey)
 		}
 		return Array.from(jobKeys)
 	}
 	
-	extractUniqueCoordinates(searchResults) {
+	extractUniqueCoordinates() {
 		var uniqueCoords = new Set()
-		for (var result of searchResults) {
+		for (var result of this.searchResults) {
 			if (result.latitude && result.longitude) {
 				uniqueCoords.add(`${result.latitude},${result.longitude}`)
 			} else {
@@ -60,9 +61,9 @@ export default class JobDataTransformer {
 		return locations
 	}
 	
-	addJobsToLocations(searchResults) {
+	addJobsToLocations(uniqueJobs) {
 		this.locations.forEach((location) => {
-			location.jobs = searchResults.filter((result) => result.latitude == location.latitude && result.longitude == location.longitude)
+			location.jobs = uniqueJobs.filter((job) => job.latitude == location.latitude && job.longitude == location.longitude)
 		})
 	}
 	

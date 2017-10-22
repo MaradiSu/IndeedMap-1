@@ -1,4 +1,101 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.esriLoader = global.esriLoader || {})));
+}(this, (function (exports) { 'use strict';
+
+/*
+  Copyright 2017 Esri
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+// get the script injected by this library
+function getScript() {
+    return document.querySelector('script[data-esri-loader]');
+}
+// has ArcGIS API been loaded on the page yet?
+function isLoaded() {
+    // would like to just use window.require, but fucking typescript
+    return typeof window['require'] !== 'undefined' && getScript();
+}
+// load the ArcGIS API on the page
+function bootstrap(callback, options) {
+    if (options === void 0) { options = {}; }
+    // default options
+    if (!options.url) {
+        options.url = 'https://js.arcgis.com/4.4/';
+    }
+    // don't reload API if it is already loaded or in the process of loading
+    if (getScript()) {
+        callback(new Error('The ArcGIS API for JavaScript is already loaded.'));
+        return;
+    }
+    // create a script object whose source points to the API
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = options.url;
+    script.dataset['esriLoader'] = 'loading';
+    // once the script is loaded...
+    script.onload = function () {
+        // update the status of the script
+        script.dataset['esriLoader'] = 'loaded';
+        // we can now use Dojo's require() to load esri and dojo AMD modules
+        var dojoRequire = window['require'];
+        if (callback) {
+            // let the caller know that the API has been successfully loaded
+            // and as a convenience, return the require function
+            // in case they want to use it directly
+            callback(null, dojoRequire);
+        }
+    };
+    // load the script
+    document.body.appendChild(script);
+}
+function dojoRequire(modules, callback) {
+    if (isLoaded()) {
+        window['require'](modules, callback);
+    }
+    else {
+        var script_1 = getScript();
+        if (script_1) {
+            // Not yet loaded but script is in the body - use callback once loaded
+            var onScriptLoad_1 = function () {
+                window['require'](modules, callback);
+                script_1.removeEventListener('load', onScriptLoad_1, false);
+            };
+            script_1.addEventListener('load', onScriptLoad_1);
+        }
+        else {
+            // Not bootstrapped
+            throw new Error('The ArcGIS API for JavaScript has not been loaded. You must first call esriLoader.bootstrap()');
+        }
+    }
+}
+var esriLoader = {
+    isLoaded: isLoaded,
+    bootstrap: bootstrap,
+    dojoRequire: dojoRequire
+};
+
+exports.isLoaded = isLoaded;
+exports.bootstrap = bootstrap;
+exports.dojoRequire = dojoRequire;
+exports['default'] = esriLoader;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+
+},{}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34,7 +131,7 @@ var IpFetcher = function () {
 
 exports.default = IpFetcher;
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50,25 +147,26 @@ var JobDataTransformer = function () {
 		_classCallCheck(this, JobDataTransformer);
 
 		this.jobsNoCoords = [];
+		this.searchResults = searchResults;
 
-		this.transformData(searchResults);
+		this.transformData();
 	}
 
 	_createClass(JobDataTransformer, [{
 		key: "transformData",
-		value: function transformData(searchResults) {
-			var uniqueJobs = this.getUniqueJobs(searchResults);
+		value: function transformData() {
+			var uniqueJobs = this.getUniqueJobs();
 			var uniqueCoords = this.extractUniqueCoordinates(uniqueJobs);
 			this.locations = this.parseLocations(uniqueCoords);
-			this.addJobsToLocations(searchResults);
+			this.addJobsToLocations(uniqueJobs);
 			this.addCityStateToLocations();
 			console.log(this.locations);
 			console.log(this.jobsNoCoords);
 		}
 	}, {
 		key: "getUniqueJobs",
-		value: function getUniqueJobs(searchResults) {
-			var uniqueJobKeys = this.getUniqueJobKeys(searchResults);
+		value: function getUniqueJobs() {
+			var uniqueJobKeys = this.getUniqueJobKeys();
 			var uniqueJobs = [];
 			var _iteratorNormalCompletion = true;
 			var _didIteratorError = false;
@@ -78,7 +176,7 @@ var JobDataTransformer = function () {
 				for (var _iterator = uniqueJobKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 					var key = _step.value;
 
-					var jobs = searchResults.filter(function (job) {
+					var jobs = this.searchResults.filter(function (job) {
 						return job.jobkey == key;
 					});
 					if (jobs.length > 0) {
@@ -100,20 +198,20 @@ var JobDataTransformer = function () {
 				}
 			}
 
-			console.log("total jobs found: " + searchResults.length);
+			console.log("total jobs found: " + this.searchResults.length);
 			console.log("total unique jobs found: " + uniqueJobs.length);
 			return uniqueJobs;
 		}
 	}, {
 		key: "getUniqueJobKeys",
-		value: function getUniqueJobKeys(searchResults) {
+		value: function getUniqueJobKeys() {
 			var jobKeys = new Set();
 			var _iteratorNormalCompletion2 = true;
 			var _didIteratorError2 = false;
 			var _iteratorError2 = undefined;
 
 			try {
-				for (var _iterator2 = searchResults[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+				for (var _iterator2 = this.searchResults[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 					var result = _step2.value;
 
 					jobKeys.add(result.jobkey);
@@ -137,14 +235,14 @@ var JobDataTransformer = function () {
 		}
 	}, {
 		key: "extractUniqueCoordinates",
-		value: function extractUniqueCoordinates(searchResults) {
+		value: function extractUniqueCoordinates() {
 			var uniqueCoords = new Set();
 			var _iteratorNormalCompletion3 = true;
 			var _didIteratorError3 = false;
 			var _iteratorError3 = undefined;
 
 			try {
-				for (var _iterator3 = searchResults[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+				for (var _iterator3 = this.searchResults[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
 					var result = _step3.value;
 
 					if (result.latitude && result.longitude) {
@@ -205,10 +303,10 @@ var JobDataTransformer = function () {
 		}
 	}, {
 		key: "addJobsToLocations",
-		value: function addJobsToLocations(searchResults) {
+		value: function addJobsToLocations(uniqueJobs) {
 			this.locations.forEach(function (location) {
-				location.jobs = searchResults.filter(function (result) {
-					return result.latitude == location.latitude && result.longitude == location.longitude;
+				location.jobs = uniqueJobs.filter(function (job) {
+					return job.latitude == location.latitude && job.longitude == location.longitude;
 				});
 			});
 		}
@@ -227,7 +325,7 @@ var JobDataTransformer = function () {
 
 exports.default = JobDataTransformer;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -393,7 +491,73 @@ var JobFetcher = function () {
 
 exports.default = JobFetcher;
 
-},{"./IpFetcher":1,"./JobDataTransformer":2}],4:[function(require,module,exports){
+},{"./IpFetcher":2,"./JobDataTransformer":3}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _esriLoader = require("esri-loader");
+
+var esriLoader = _interopRequireWildcard(_esriLoader);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ModuleLoader = function () {
+    function ModuleLoader() {
+        var _this = this;
+
+        _classCallCheck(this, ModuleLoader);
+
+        esriLoader.bootstrap(function (err) {
+            if (err) {
+                console.error("error loading esri modules!");
+            } else {
+                _this.loadModules();
+            }
+        }, {
+            url: 'https://js.arcgis.com/3.21/'
+        });
+    }
+
+    _createClass(ModuleLoader, [{
+        key: "loadModules",
+        value: function loadModules() {
+            var _this2 = this;
+
+            esriLoader.dojoRequire(["esri/map", "esri/Color", "esri/graphic", "esri/InfoTemplate", "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol", "esri/layers/GraphicsLayer", "esri/geometry/Point", "esri/dijit/InfoWindowLite", "dojo/dom-construct", "dojo/domReady!"], function (Map, Color, Graphic, InfoTemplate, SimpleMarkerSymbol, SimpleLineSymbol, GraphicsLayer, Point, InfoWindowLite, domConstruct) {
+                _this2.Map = Map;
+                _this2.Color = Color;
+                _this2.Graphic = Graphic;
+                _this2.InfoTemplate = InfoTemplate;
+
+                _this2.SimpleMarkerSymbol = SimpleMarkerSymbol;
+                _this2.SimpleLineSymbol = SimpleLineSymbol;
+
+                _this2.GraphicsLayer = GraphicsLayer;
+
+                _this2.Point = Point;
+
+                _this2.InfoWindowLite = InfoWindowLite;
+
+                _this2.domConstruct = domConstruct;
+
+                $(document).trigger("esri-modules-loaded");
+            });
+        }
+    }]);
+
+    return ModuleLoader;
+}();
+
+exports.default = ModuleLoader;
+
+},{"esri-loader":1}],6:[function(require,module,exports){
 "use strict";
 
 var _ProgressBar = require("./ui/ProgressBar");
@@ -426,7 +590,7 @@ $(document).ready(function () {
 	new _JobMap2.default($("#map-pane"));
 });
 
-},{"./JobFetcher":3,"./ui/Error":5,"./ui/JobMap":6,"./ui/ProgressBar":9,"./ui/TabbedPanes":10}],5:[function(require,module,exports){
+},{"./JobFetcher":4,"./ui/Error":7,"./ui/JobMap":8,"./ui/ProgressBar":10,"./ui/TabbedPanes":11}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -458,7 +622,7 @@ var Error = function () {
 
 exports.default = Error;
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -471,7 +635,7 @@ var _JobDataTransformer = require("../JobDataTransformer");
 
 var _JobDataTransformer2 = _interopRequireDefault(_JobDataTransformer);
 
-var _ModuleLoader = require("./ModuleLoader");
+var _ModuleLoader = require("../ModuleLoader");
 
 var _ModuleLoader2 = _interopRequireDefault(_ModuleLoader);
 
@@ -623,7 +787,7 @@ var JobMap = function () {
 
 exports.default = JobMap;
 
-},{"../JobDataTransformer":2,"./ModuleLoader":8}],7:[function(require,module,exports){
+},{"../JobDataTransformer":3,"../ModuleLoader":5}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -714,73 +878,7 @@ var JobSearchForm = function () {
 
 exports.default = JobSearchForm;
 
-},{}],8:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _esriLoader = require("esri-loader");
-
-var esriLoader = _interopRequireWildcard(_esriLoader);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ModuleLoader = function () {
-    function ModuleLoader() {
-        var _this = this;
-
-        _classCallCheck(this, ModuleLoader);
-
-        esriLoader.bootstrap(function (err) {
-            if (err) {
-                console.error("error loading esri modules!");
-            } else {
-                _this.loadModules();
-            }
-        }, {
-            url: 'https://js.arcgis.com/3.21/'
-        });
-    }
-
-    _createClass(ModuleLoader, [{
-        key: "loadModules",
-        value: function loadModules() {
-            var _this2 = this;
-
-            esriLoader.dojoRequire(["esri/map", "esri/Color", "esri/graphic", "esri/InfoTemplate", "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol", "esri/layers/GraphicsLayer", "esri/geometry/Point", "esri/dijit/InfoWindowLite", "dojo/dom-construct", "dojo/domReady!"], function (Map, Color, Graphic, InfoTemplate, SimpleMarkerSymbol, SimpleLineSymbol, GraphicsLayer, Point, InfoWindowLite, domConstruct) {
-                _this2.Map = Map;
-                _this2.Color = Color;
-                _this2.Graphic = Graphic;
-                _this2.InfoTemplate = InfoTemplate;
-
-                _this2.SimpleMarkerSymbol = SimpleMarkerSymbol;
-                _this2.SimpleLineSymbol = SimpleLineSymbol;
-
-                _this2.GraphicsLayer = GraphicsLayer;
-
-                _this2.Point = Point;
-
-                _this2.InfoWindowLite = InfoWindowLite;
-
-                _this2.domConstruct = domConstruct;
-
-                $(document).trigger("esri-modules-loaded");
-            });
-        }
-    }]);
-
-    return ModuleLoader;
-}();
-
-exports.default = ModuleLoader;
-
-},{"esri-loader":12}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -892,7 +990,7 @@ var ProgressBar = function () {
 
 exports.default = ProgressBar;
 
-},{"../utils/D3Utils":11}],10:[function(require,module,exports){
+},{"../utils/D3Utils":12}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1119,7 +1217,7 @@ var TabbedPanes = function () {
 
 exports.default = TabbedPanes;
 
-},{"./JobSearchForm":7}],11:[function(require,module,exports){
+},{"./JobSearchForm":9}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1132,101 +1230,4 @@ function createArc(startAngle, endAngle, innerRadius, outerRadius) {
        return arc;
 }
 
-},{}],12:[function(require,module,exports){
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.esriLoader = global.esriLoader || {})));
-}(this, (function (exports) { 'use strict';
-
-/*
-  Copyright 2017 Esri
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-*/
-// get the script injected by this library
-function getScript() {
-    return document.querySelector('script[data-esri-loader]');
-}
-// has ArcGIS API been loaded on the page yet?
-function isLoaded() {
-    // would like to just use window.require, but fucking typescript
-    return typeof window['require'] !== 'undefined' && getScript();
-}
-// load the ArcGIS API on the page
-function bootstrap(callback, options) {
-    if (options === void 0) { options = {}; }
-    // default options
-    if (!options.url) {
-        options.url = 'https://js.arcgis.com/4.4/';
-    }
-    // don't reload API if it is already loaded or in the process of loading
-    if (getScript()) {
-        callback(new Error('The ArcGIS API for JavaScript is already loaded.'));
-        return;
-    }
-    // create a script object whose source points to the API
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = options.url;
-    script.dataset['esriLoader'] = 'loading';
-    // once the script is loaded...
-    script.onload = function () {
-        // update the status of the script
-        script.dataset['esriLoader'] = 'loaded';
-        // we can now use Dojo's require() to load esri and dojo AMD modules
-        var dojoRequire = window['require'];
-        if (callback) {
-            // let the caller know that the API has been successfully loaded
-            // and as a convenience, return the require function
-            // in case they want to use it directly
-            callback(null, dojoRequire);
-        }
-    };
-    // load the script
-    document.body.appendChild(script);
-}
-function dojoRequire(modules, callback) {
-    if (isLoaded()) {
-        window['require'](modules, callback);
-    }
-    else {
-        var script_1 = getScript();
-        if (script_1) {
-            // Not yet loaded but script is in the body - use callback once loaded
-            var onScriptLoad_1 = function () {
-                window['require'](modules, callback);
-                script_1.removeEventListener('load', onScriptLoad_1, false);
-            };
-            script_1.addEventListener('load', onScriptLoad_1);
-        }
-        else {
-            // Not bootstrapped
-            throw new Error('The ArcGIS API for JavaScript has not been loaded. You must first call esriLoader.bootstrap()');
-        }
-    }
-}
-var esriLoader = {
-    isLoaded: isLoaded,
-    bootstrap: bootstrap,
-    dojoRequire: dojoRequire
-};
-
-exports.isLoaded = isLoaded;
-exports.bootstrap = bootstrap;
-exports.dojoRequire = dojoRequire;
-exports['default'] = esriLoader;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-
-
-},{}]},{},[4]);
+},{}]},{},[6]);

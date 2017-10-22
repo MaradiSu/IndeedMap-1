@@ -1,5 +1,5 @@
 import JobDataTransformer from "../JobDataTransformer"
-import ModuleLoader from "./ModuleLoader"
+import ModuleLoader from "../ModuleLoader"
 
 export default class JobMap {
 	constructor(jobMapElem) {
