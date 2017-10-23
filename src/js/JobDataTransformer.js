@@ -7,13 +7,12 @@ export default class JobDataTransformer {
 	}
 	
 	transformData() {
-		var uniqueJobs = this.getUniqueJobs()
-		var uniqueCoords = this.extractUniqueCoordinates(uniqueJobs)
-		this.locations = this.parseLocations(uniqueCoords)
-		this.addJobsToLocations(uniqueJobs)
+		this.jobs = this.getUniqueJobs()
+		this.coordinates = this.getUniqueCoordinates()
+		this.locations = this.getLocations()
+
+		this.addJobsToLocations()
 		this.addCityStateToLocations()
-		console.log(this.locations)
-		console.log(this.jobsNoCoords)
 	}
 	
 	getUniqueJobs() {
@@ -26,8 +25,6 @@ export default class JobDataTransformer {
 			}
 		}
 		
-		console.log("total jobs found: " + this.searchResults.length)
-		console.log("total unique jobs found: " + uniqueJobs.length)
 		return uniqueJobs
 	}
 	
@@ -39,7 +36,7 @@ export default class JobDataTransformer {
 		return Array.from(jobKeys)
 	}
 	
-	extractUniqueCoordinates() {
+	getUniqueCoordinates() {
 		var uniqueCoords = new Set()
 		for (var result of this.searchResults) {
 			if (result.latitude && result.longitude) {
@@ -51,9 +48,9 @@ export default class JobDataTransformer {
 		return Array.from(uniqueCoords)
 	}
 	
-	parseLocations(uniqueCoords) {
+	getLocations() {
 		var locations = []
-		for (var coord of uniqueCoords) {
+		for (var coord of this.coordinates) {
 			var latitude = parseFloat(coord.split(",")[0])
 			var longitude = parseFloat(coord.split(",")[1])
 			locations.push({latitude: latitude, longitude: longitude})
@@ -61,9 +58,9 @@ export default class JobDataTransformer {
 		return locations
 	}
 	
-	addJobsToLocations(uniqueJobs) {
+	addJobsToLocations() {
 		this.locations.forEach((location) => {
-			location.jobs = uniqueJobs.filter((job) => job.latitude == location.latitude && job.longitude == location.longitude)
+			location.jobs = this.jobs.filter((job) => job.latitude == location.latitude && job.longitude == location.longitude)
 		})
 	}
 	

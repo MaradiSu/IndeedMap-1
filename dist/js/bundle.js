@@ -155,13 +155,12 @@ var JobDataTransformer = function () {
 	_createClass(JobDataTransformer, [{
 		key: "transformData",
 		value: function transformData() {
-			var uniqueJobs = this.getUniqueJobs();
-			var uniqueCoords = this.extractUniqueCoordinates(uniqueJobs);
-			this.locations = this.parseLocations(uniqueCoords);
-			this.addJobsToLocations(uniqueJobs);
+			this.jobs = this.getUniqueJobs();
+			this.coordinates = this.getUniqueCoordinates();
+			this.locations = this.getLocations();
+
+			this.addJobsToLocations();
 			this.addCityStateToLocations();
-			console.log(this.locations);
-			console.log(this.jobsNoCoords);
 		}
 	}, {
 		key: "getUniqueJobs",
@@ -198,8 +197,6 @@ var JobDataTransformer = function () {
 				}
 			}
 
-			console.log("total jobs found: " + this.searchResults.length);
-			console.log("total unique jobs found: " + uniqueJobs.length);
 			return uniqueJobs;
 		}
 	}, {
@@ -234,8 +231,8 @@ var JobDataTransformer = function () {
 			return Array.from(jobKeys);
 		}
 	}, {
-		key: "extractUniqueCoordinates",
-		value: function extractUniqueCoordinates() {
+		key: "getUniqueCoordinates",
+		value: function getUniqueCoordinates() {
 			var uniqueCoords = new Set();
 			var _iteratorNormalCompletion3 = true;
 			var _didIteratorError3 = false;
@@ -269,15 +266,15 @@ var JobDataTransformer = function () {
 			return Array.from(uniqueCoords);
 		}
 	}, {
-		key: "parseLocations",
-		value: function parseLocations(uniqueCoords) {
+		key: "getLocations",
+		value: function getLocations() {
 			var locations = [];
 			var _iteratorNormalCompletion4 = true;
 			var _didIteratorError4 = false;
 			var _iteratorError4 = undefined;
 
 			try {
-				for (var _iterator4 = uniqueCoords[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+				for (var _iterator4 = this.coordinates[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
 					var coord = _step4.value;
 
 					var latitude = parseFloat(coord.split(",")[0]);
@@ -303,9 +300,11 @@ var JobDataTransformer = function () {
 		}
 	}, {
 		key: "addJobsToLocations",
-		value: function addJobsToLocations(uniqueJobs) {
+		value: function addJobsToLocations() {
+			var _this = this;
+
 			this.locations.forEach(function (location) {
-				location.jobs = uniqueJobs.filter(function (job) {
+				location.jobs = _this.jobs.filter(function (job) {
 					return job.latitude == location.latitude && job.longitude == location.longitude;
 				});
 			});
